@@ -1,0 +1,250 @@
+<!doctype html>
+<!--
+  Ayuda general de la demo (`ayuda-y-soporte-en-demo`, ampliada en `ayuda-general-en-demo`). Solo la copia `build-demo`
+  (angular.json) y su nombre y su frase de «Sobre esta demo» son marcas de la demo (`scripts/lib/marcas-demo.mjs`): la
+  entrega no puede llevarla. El contenido sale de `docs/AYUDA-APP.md`. Autocontenida y sin scripts; la identidad sale de
+  la misma hoja que la app (`identidad/identidad.css`).
+-->
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Ayuda y soporte · Saint Portal · Demo</title>
+  <link rel="stylesheet" href="identidad/identidad.css">
+  <style>
+    :root { --saint-verde: #1C3F34; --color-identidad: var(--saint-identidad-color-principal, var(--saint-verde)); }
+    * { box-sizing: border-box; }
+    html { -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    body {
+      margin: 0; min-height: 100vh; background: #f9fafb; color: #1f2937;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+    /* Márgenes laterales en px: con la letra al 200 % en 320 px, en rem se comerían la mitad del ancho del texto. */
+    header { background: var(--color-identidad); color: #fff; padding: 1.5rem 16px; }
+    header p { margin: 0; font-size: .875rem; opacity: .85; }
+    h1 { margin: .25rem 0 0; font-size: 1.5rem; font-weight: 700; }
+    main { max-width: 40rem; margin: 0 auto; padding: 1.5rem 16px 3rem; }
+    .introduccion { margin: 0 0 1.25rem; color: #4b5563; }
+    .tarjeta { background: #fff; border: 1px solid #e5e7eb; border-radius: 1rem; padding: 1.25rem 16px; margin-bottom: 1rem; }
+    section.tarjeta { scroll-margin-top: 1rem; }
+    h2 { margin: 0 0 .75rem; font-size: 1.25rem; font-weight: 700; color: var(--color-identidad); }
+    h3 { margin: 1.25rem 0 .5rem; font-size: 1.0625rem; font-weight: 700; }
+    p { margin: 0 0 .75rem; }
+    ul, ol { margin: 0 0 .75rem; padding-left: 1.5em; }
+    li + li { margin-top: .375rem; }
+    .tarjeta > :last-child { margin-bottom: 0; }
+    nav ol { margin: 0; }
+    a { color: var(--color-identidad); font-weight: 600; text-underline-offset: .2em; }
+    a:focus { outline: none; }
+    a:focus-visible { outline: 2px solid var(--color-identidad); outline-offset: 2px; border-radius: .25rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <p>Saint Portal · Demo</p>
+    <h1>Ayuda y soporte</h1>
+  </header>
+  <main>
+    <p class="introduccion">Esta guía explica cómo entrar en la app, cómo instalarla y qué encontrará en cada pantalla.</p>
+
+    <nav class="tarjeta" aria-labelledby="titulo-indice">
+      <h2 id="titulo-indice">Contenido</h2>
+      <ol>
+        <li><a href="#acceso">Cómo acceder</a></li>
+        <li><a href="#instalacion">Instalar la app</a></li>
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#ausencias">Ausencias</a></li>
+        <li><a href="#nominas">Nóminas</a></li>
+        <li><a href="#mi-perfil">Mi perfil</a></li>
+        <li><a href="#pantalla">Pantalla, orientación y letra</a></li>
+        <li><a href="#demo">Sobre esta demo</a></li>
+      </ol>
+    </nav>
+
+    <section class="tarjeta" id="acceso" aria-labelledby="titulo-acceso">
+      <h2 id="titulo-acceso">Cómo acceder</h2>
+      <ol>
+        <li>Abra la dirección de la app que le haya facilitado su organización.</li>
+        <li>Pulse <strong>Acceder</strong>. Se abrirá la página de identificación de su organización.</li>
+        <li>Identifíquese con su usuario y su contraseña.</li>
+        <li>Volverá a la app. Verá «Cargando…» y después la pantalla de Inicio.</li>
+      </ol>
+      <h3>Si no puede entrar</h3>
+      <p>Si algo falla, la pantalla de acceso muestra un aviso con el motivo. Por ejemplo:</p>
+      <ul>
+        <li>«No se ha podido acceder. Inténtelo de nuevo.»: pulse otra vez <strong>Acceder</strong>.</li>
+        <li>«No tiene acceso al Portal del Empleado. Si cree que es un error, contacte con su administrador.»: su usuario
+          no tiene ese permiso.</li>
+        <li>Sin conexión a internet, <strong>Acceder</strong> no está disponible. Verá «Se necesita conexión para acceder.».</li>
+      </ul>
+      <h3>Su sesión</h3>
+      <ul>
+        <li>La sesión se mantiene aunque recargue la página o cierre y vuelva a abrir el navegador. Entrará directamente.</li>
+        <li>Todas las pestañas del navegador comparten la misma sesión.</li>
+        <li>Si pasan 15 minutos sin usar la app, la sesión se cierra por seguridad. Su organización puede fijar otro tiempo.</li>
+        <li>Al volver, verá «Sesión cerrada por inactividad.». Pulse <strong>Acceder</strong> para identificarse de nuevo.</li>
+        <li>Para salir, pulse <strong>Cerrar sesión</strong> en Mi perfil.</li>
+      </ul>
+    </section>
+
+    <section class="tarjeta" id="instalacion" aria-labelledby="titulo-instalacion">
+      <h2 id="titulo-instalacion">Instalar la app</h2>
+      <p>Instalarla es opcional. Sin instalar, la app funciona igual en el navegador.</p>
+      <p>Instalada, la app se abre desde su icono, a pantalla completa y sin las barras del navegador.</p>
+      <p>En la pantalla de acceso, bajo <strong>Acceder</strong>, está el botón <strong>Instalar la app</strong>. Si su navegador
+        lo permite, abre la ventana de instalación. Si no, muestra los pasos para su dispositivo.</p>
+      <h3>Android, con Chrome</h3>
+      <ol>
+        <li>Pulse <strong>Instalar la app</strong> y acepte la ventana de Chrome.</li>
+        <li>Si no aparece esa ventana, abra el menú ⋮ de Chrome.</li>
+        <li>Pulse «Añadir a pantalla de inicio».</li>
+        <li>Pulse «Instalar».</li>
+      </ol>
+      <p>La app aparecerá en la pantalla de inicio y entre sus aplicaciones.</p>
+      <h3>iPhone y iPad, con Safari</h3>
+      <p>Safari no permite instalar desde la propia página. Siga estos pasos:</p>
+      <ol>
+        <li>Pulse el botón <strong>Compartir</strong> de Safari. En el iPhone está en la barra inferior.</li>
+        <li>Elija «Añadir a pantalla de inicio».</li>
+        <li>Deje activado «Abrir como app web» y pulse «Añadir».</li>
+      </ol>
+      <p>En el iPhone y el iPad, la app instalada tiene su propia sesión, separada de la de Safari. Tendrá que identificarse
+        también en la app instalada.</p>
+      <h3>Ordenador, con Chrome o Edge</h3>
+      <ol>
+        <li>Pulse <strong>Instalar la app</strong> y acepte la ventana del navegador.</li>
+        <li>También puede pulsar el icono de instalar que aparece a la derecha de la barra de direcciones.</li>
+      </ol>
+      <p>La app quedará entre las aplicaciones instaladas de su ordenador.</p>
+      <h3>Actualizaciones</h3>
+      <ul>
+        <li>La app se actualiza sola. No hace falta volver a instalarla.</li>
+        <li>Si sale una versión nueva mientras la usa, verá «Hay una versión nueva de la app.». Pulse
+          <strong>Actualizar</strong>. Seguirá en la misma pantalla, sin perder la sesión.</li>
+      </ul>
+    </section>
+
+    <section class="tarjeta" id="inicio" aria-labelledby="titulo-inicio">
+      <h2 id="titulo-inicio">Inicio</h2>
+      <p>Es la primera pantalla. Arriba verá un saludo y la fecha. Debajo, varias tarjetas con un resumen:</p>
+      <ul>
+        <li><strong>Próximo turno</strong>: su siguiente turno de trabajo, con el día, el horario y la actividad.</li>
+        <li><strong>Última nómina</strong>: la más reciente. Pulse <strong>PDF</strong> para descargarla.</li>
+        <li><strong>Solicitudes pendientes</strong>: las solicitudes de ausencia que esperan validación. Toque la cabecera
+          para verlas en Ausencias, o una solicitud para abrirla.</li>
+        <li>Si no tiene solicitudes pendientes, la tarjeta muestra su última solicitud y el enlace
+          <strong>Ver todas</strong>.</li>
+        <li><strong>Planificación anual</strong>: descarga en PDF la planificación del año. Solo aparece si la del año en
+          curso está publicada.</li>
+      </ul>
+      <p>Las tarjetas se actualizan solas al entrar en Inicio y al volver a la app.</p>
+    </section>
+
+    <section class="tarjeta" id="ausencias" aria-labelledby="titulo-ausencias">
+      <h2 id="titulo-ausencias">Ausencias</h2>
+      <p>En esta pantalla, titulada «Solicitudes», están sus solicitudes de ausencia. El color indica su estado:</p>
+      <ul>
+        <li><strong>Pendiente</strong>: ámbar.</li>
+        <li><strong>Validada</strong>: verde.</li>
+        <li><strong>Rechazada</strong>: rosa.</li>
+        <li><strong>Anulada</strong>: gris.</li>
+      </ul>
+      <p>Para actualizar la lista, deslice hacia abajo.</p>
+      <h3>Filtros</h3>
+      <ul>
+        <li>Bajo el título hay tres filtros: <strong>Estado</strong>, <strong>Ejercicio</strong> y <strong>Tipo</strong>.</li>
+        <li>Toque uno, marque las opciones y pulse <strong>Aplicar</strong>. <strong>Limpiar</strong> quita lo marcado.</li>
+        <li>Al principio se ven las pendientes, las validadas y las rechazadas. Para ver las anuladas, márquelas en el
+          filtro Estado.</li>
+      </ul>
+      <h3>Detalle y tramitación</h3>
+      <p>Toque una solicitud para ver su ficha. Verá sus datos y su tramitación: cada nivel, su estado y su fecha.</p>
+      <h3>Nueva solicitud</h3>
+      <p>Pulse el botón <strong>Nueva</strong>, abajo a la derecha. Un asistente le guía paso a paso:</p>
+      <ol>
+        <li>Elija el tipo de ausencia.</li>
+        <li>Indique las fechas.</li>
+        <li>Si es un permiso parental, elija el descendiente.</li>
+        <li>Elija la provisión y el año al que se imputa la ausencia.</li>
+        <li>En una ausencia de un solo día con turno, el asistente puede mostrarle su jornada. Allí puede pedir solo unas
+          horas con «Ausencia parcial».</li>
+        <li>Compruebe la duración y, si el tipo los tiene, cómo quedan sus contadores.</li>
+        <li>Revise el resumen, añada observaciones si lo desea y pulse <strong>Enviar solicitud</strong>.</li>
+      </ol>
+      <ul>
+        <li>Antes de enviar, la app le pide confirmación. La solicitud queda pendiente de validación.</li>
+        <li>Con la flecha puede volver al paso anterior sin perder lo escrito.</li>
+        <li>Si cierra el asistente con datos, la app le pregunta antes de descartarlos.</li>
+      </ul>
+      <h3>Anular una solicitud</h3>
+      <p>Solo se pueden anular las solicitudes pendientes. Abra la solicitud, pulse <strong>Anular solicitud</strong> y
+        confirme con <strong>Sí, anular</strong>. No se puede deshacer.</p>
+    </section>
+
+    <section class="tarjeta" id="nominas" aria-labelledby="titulo-nominas">
+      <h2 id="titulo-nominas">Nóminas</h2>
+      <ul>
+        <li>Muestra las nóminas de un año. Para cambiar de año, toque el botón <strong>Ejercicio</strong>, bajo el título.</li>
+        <li>Cada nómina indica el mes, el tipo (Normal, Extra o Complementaria), la gerencia y la fecha de abono.</li>
+        <li>Pulse <strong>PDF</strong> para descargar el recibo. Mientras se prepara, el botón muestra un trébol animado.</li>
+        <li>Si la descarga falla, verá un aviso. Inténtelo de nuevo.</li>
+        <li>Para actualizar la lista, deslice hacia abajo.</li>
+      </ul>
+    </section>
+
+    <section class="tarjeta" id="mi-perfil" aria-labelledby="titulo-mi-perfil">
+      <h2 id="titulo-mi-perfil">Mi perfil</h2>
+      <p>Se abre con <strong>Perfil</strong>, en la barra inferior. Arriba verá su foto, o sus iniciales, y su nombre.</p>
+      <p>Debajo hay tres tarjetas. Toque una para ver sus datos:</p>
+      <ul>
+        <li><strong>Datos personales</strong>: documento, nacimiento, nacionalidad, afiliación a la Seguridad Social e IBAN.</li>
+        <li><strong>Contacto</strong>: correos electrónicos, teléfonos y dirección.</li>
+        <li><strong>Provisión</strong>: su contrato o puesto, con el periodo, la categoría, el centro y la gerencia. Si tiene
+          varias activas, pase de una a otra deslizando o con las flechas.</li>
+      </ul>
+      <ul>
+        <li>Para cerrar los datos, pulse la ✕ o deslice hacia abajo.</li>
+        <li>Por seguridad, del documento solo se ven los 4 últimos caracteres. Del IBAN, los 2 primeros y los 4 últimos.</li>
+        <li>Los datos son solo de consulta. No se pueden cambiar desde la app.</li>
+        <li><strong>Ayuda y soporte</strong> abre esta página.</li>
+        <li><strong>Cerrar sesión</strong> cierra la sesión en todas las pestañas. Para volver, tendrá que identificarse.</li>
+        <li>Al pie se indica la versión de la app.</li>
+      </ul>
+    </section>
+
+    <section class="tarjeta" id="pantalla" aria-labelledby="titulo-pantalla">
+      <h2 id="titulo-pantalla">Pantalla, orientación y letra</h2>
+      <ul>
+        <li>La app gira con el dispositivo, en vertical o en horizontal. Si prefiere verla siempre en vertical, use el
+          bloqueo de rotación de su dispositivo.</li>
+        <li>En horizontal se ve menos contenido a la vez. Desplácese para ver el resto.</li>
+        <li>En tabletas y ordenadores, el contenido se muestra en una columna centrada.</li>
+        <li>Si aumenta el tamaño de la letra en su dispositivo o en su navegador, la app lo aplica. Los textos ocupan más
+          líneas y hay que desplazarse más.</li>
+        <li>También puede ampliar la pantalla con dos dedos.</li>
+        <li>Si usa un teclado, el elemento seleccionado se marca con un anillo verde.</li>
+      </ul>
+    </section>
+
+    <section class="tarjeta" id="demo" aria-labelledby="titulo-demo">
+      <h2 id="titulo-demo">Sobre esta demo</h2>
+      <p>Esta demo usa datos ficticios y no está conectada a ningún sistema real.</p>
+      <ul>
+        <li>Al abrirla, verá la página «Elija un usuario de prueba». Cada usuario muestra una situación distinta.</li>
+        <li>Toque un usuario y pulse <strong>Acceder</strong>. En la demo no hay página de identificación: entrará
+          directamente.</li>
+        <li>Algunos usuarios no llegan a entrar. Sirven para ver los avisos de la pantalla de acceso.</li>
+        <li>Puede enviar y anular solicitudes. Los cambios no se guardan: al cerrar la sesión, recargar la página o elegir
+          otro usuario, todo vuelve a estar como al principio.</li>
+        <li>Para cambiar de usuario, cierre la sesión o vuelva atrás desde la pantalla de acceso.</li>
+        <li>La demo se instala como una app propia, «Saint Portal · Demo», independiente de la app de su organización.</li>
+        <li>Si su organización tiene su propia página de ayuda, el botón <strong>Ayuda y soporte</strong> de su app abre
+          esa página.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
