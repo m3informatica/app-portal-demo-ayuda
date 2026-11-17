@@ -1,9 +1,15 @@
 <!doctype html>
 <!--
-  Ayuda general de la demo (`ayuda-y-soporte-en-demo`, ampliada en `ayuda-general-en-demo`). Solo la copia `build-demo`
-  (angular.json) y su nombre y su frase de «Sobre esta demo» son marcas de la demo (`scripts/lib/marcas-demo.mjs`): la
-  entrega no puede llevarla. El contenido sale de `docs/AYUDA-APP.md`. Autocontenida y sin scripts; la identidad sale de
-  la misma hoja que la app (`identidad/identidad.css`).
+  Ayuda general de la demo (`ayuda-y-soporte-en-demo`, `ayuda-general-en-demo`, `mejoras-ayuda-de-la-demo`). La fuente es este
+  fichero (`src/demo-publica/soporte-demo.html`); se publica a mano como `index.html` del repositorio
+  `m3informatica/app-portal-demo-ayuda` (GitHub Pages) y `environment.demo.ts` apunta ahí: ninguna construcción la copia. Su
+  nombre, su frase de «Sobre esta demo» y su dirección son marcas de la demo (`scripts/lib/marcas-demo.mjs`): la entrega no
+  puede llevarlos. El contenido sale de `docs/AYUDA-APP.md`.
+  Autocontenida: un solo fichero, con estilos y un script en línea, y sin hoja de identidad (en su repositorio no existe), así
+  que el color de marca va fijo. El script solo mejora: sin él, el índice y el desplazamiento siguen funcionando.
+  Las réplicas (`.replica`) imitan en pequeño los botones de la app con SUS mismos iconos: cada `path` de `<symbol>` está copiado
+  del código de la app (lo comprueba `src/entrega/demo-en-la-entrega.spec.ts`). Son decorativas (`aria-hidden`): el texto de
+  cada botón va siempre escrito en la frase.
 -->
 <html lang="es">
 <head>
@@ -11,9 +17,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
   <title>Ayuda y soporte · Saint Portal · Demo</title>
-  <link rel="stylesheet" href="identidad/identidad.css">
   <style>
-    :root { --saint-verde: #1C3F34; --color-identidad: var(--saint-identidad-color-principal, var(--saint-verde)); }
+    :root { --color-identidad: #1C3F34; --borde-suave: #d1d5db; --gris-fondo: #e5e7eb; }
     * { box-sizing: border-box; }
     html { -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; }
     @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
@@ -23,13 +28,17 @@
       overflow-wrap: anywhere;
     }
     /* Márgenes laterales en px: con la letra al 200 % en 320 px, en rem se comerían la mitad del ancho del texto. */
-    header { background: var(--color-identidad); color: #fff; padding: 1.5rem 16px; }
-    header p { margin: 0; font-size: .875rem; opacity: .85; }
-    h1 { margin: .25rem 0 0; font-size: 1.5rem; font-weight: 700; }
-    main { max-width: 40rem; margin: 0 auto; padding: 1.5rem 16px 3rem; }
+    /* El alto real de la cabecera lo mide el script en --alto-cabecera; el respaldo cubre el caso sin script. */
+    header {
+      position: sticky; top: 0; z-index: 10; background: var(--color-identidad); color: #fff; padding: .5rem 16px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
+    }
+    header p { margin: 0; font-size: .75rem; line-height: 1.3; opacity: .85; }
+    h1 { margin: 0; font-size: 1.125rem; line-height: 1.3; font-weight: 700; }
+    main { max-width: 40rem; margin: 0 auto; padding: 1.5rem 16px 5rem; }
     .introduccion { margin: 0 0 1.25rem; color: #4b5563; }
     .tarjeta { background: #fff; border: 1px solid #e5e7eb; border-radius: 1rem; padding: 1.25rem 16px; margin-bottom: 1rem; }
-    section.tarjeta { scroll-margin-top: 1rem; }
+    section.tarjeta { scroll-margin-top: calc(var(--alto-cabecera, 4rem) + .75rem); }
     h2 { margin: 0 0 .75rem; font-size: 1.25rem; font-weight: 700; color: var(--color-identidad); }
     h3 { margin: 1.25rem 0 .5rem; font-size: 1.0625rem; font-weight: 700; }
     p { margin: 0 0 .75rem; }
@@ -39,13 +48,69 @@
     nav ol { margin: 0; }
     a { color: var(--color-identidad); font-weight: 600; text-underline-offset: .2em; }
     a:focus { outline: none; }
-    a:focus-visible { outline: 2px solid var(--color-identidad); outline-offset: 2px; border-radius: .25rem; }
+    a:focus-visible, section.tarjeta:focus-visible { outline: 2px solid var(--color-identidad); outline-offset: 2px; border-radius: .25rem; }
+    section.tarjeta:focus:not(:focus-visible) { outline: none; }
+
+    #volver-arriba {
+      position: fixed; bottom: max(16px, env(safe-area-inset-bottom)); right: max(16px, env(safe-area-inset-right));
+      width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--color-identidad); color: #fff; box-shadow: 0 4px 12px rgba(0, 0, 0, .3); cursor: pointer;
+    }
+    #volver-arriba[hidden] { display: none; }
+    #volver-arriba:focus-visible { outline: 2px solid #fff; outline-offset: 2px; box-shadow: 0 0 0 5px var(--color-identidad); }
+    #volver-arriba svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* Réplicas: pequeñas, en línea, y capaces de partir línea y de encoger (nunca ensanchan la página). */
+    .replica {
+      display: inline-flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .25em; vertical-align: middle;
+      min-width: 0; max-width: 100%; margin: .125em .125em; padding: .125em .625em; border: 1px solid transparent; border-radius: .625em;
+      font-size: .8125rem; line-height: 1.3; font-weight: 700; text-align: center; color: #111827; background: #fff;
+    }
+    .ic { flex: none; width: 1.25em; height: 1.25em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .ic--fino { stroke-width: 1.5; }
+    .replica--primario { background: var(--color-identidad); color: #fff; padding-inline: 1em; }
+    .replica--secundario { border-color: var(--borde-suave); }
+    .replica--instalar { border-color: var(--color-identidad); color: var(--color-identidad); }
+    .replica--chip { background: var(--color-identidad); color: #fff; border-radius: 999px; padding-inline: .75em; font-weight: 600; }
+    .replica--chip .ic { width: .875em; height: .875em; opacity: .85; }
+    .replica--pdf { border-color: #a7c4b8; color: var(--color-identidad); border-radius: .5em; }
+    .replica--nueva { background: var(--color-identidad); color: #fff; border-radius: .875em; padding: .25em .75em; }
+    .replica--icono { padding: .25em; border-color: var(--borde-suave); border-radius: .625em; color: #374151; }
+    .replica--menu { background: var(--gris-fondo); color: var(--color-identidad); padding: 0 .4em; border-radius: .375em; }
+    .replica--barra { gap: 0; padding: .125em; border-color: var(--gris-fondo); border-radius: .75em; }
+    .barra__opcion { display: inline-flex; flex-direction: column; align-items: center; min-width: 0; padding: .125em .5em; font-size: .6875rem; font-weight: 400; }
+    .barra__opcion .ic { width: 1.5em; height: 1.5em; }
   </style>
 </head>
 <body>
+  <!-- Iconos de la app (mismos `path`), definidos una vez y usados por las réplicas. -->
+  <svg width="0" height="0" style="position: absolute" aria-hidden="true" focusable="false">
+    <symbol id="ic-compartir" viewBox="0 0 24 24">
+      <path d="M8 10H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-1" />
+      <path d="M12 15V3M8.5 6.5 12 3l3.5 3.5" />
+    </symbol>
+    <symbol id="ic-instalar-navegador" viewBox="0 0 24 24">
+      <rect x="3" y="4" width="18" height="12" rx="2" />
+      <path d="M12 7v5M9.5 10 12 12.5 14.5 10M8 20h8M12 16v4" />
+    </symbol>
+    <symbol id="ic-descargar" viewBox="0 0 24 24"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14" /></symbol>
+    <symbol id="ic-pdf" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></symbol>
+    <symbol id="ic-desplegar" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" /></symbol>
+    <symbol id="ic-mas" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></symbol>
+    <symbol id="ic-cerrar" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" /></symbol>
+    <symbol id="ic-ayuda" viewBox="0 0 24 24"><path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" /></symbol>
+    <symbol id="ic-salir" viewBox="0 0 24 24"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" /></symbol>
+    <symbol id="ic-atras" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" /></symbol>
+    <symbol id="ic-inicio" viewBox="0 0 24 24"><path d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></symbol>
+    <symbol id="ic-ausencias" viewBox="0 0 24 24"><path d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z" /></symbol>
+    <symbol id="ic-nominas" viewBox="0 0 24 24"><path d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" /></symbol>
+    <symbol id="ic-perfil" viewBox="0 0 24 24"><path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></symbol>
+  </svg>
+
   <header>
     <p>Saint Portal · Demo</p>
-    <h1>Ayuda y soporte</h1>
+    <h1 tabindex="-1">Ayuda y soporte</h1>
   </header>
   <main>
     <p class="introduccion">Esta guía explica cómo entrar en la app, cómo instalarla y qué encontrará en cada pantalla.</p>
@@ -68,7 +133,8 @@
       <h2 id="titulo-acceso">Cómo acceder</h2>
       <ol>
         <li>Abra la dirección de la app que le haya facilitado su organización.</li>
-        <li>Pulse <strong>Acceder</strong>. Se abrirá la página de identificación de su organización.</li>
+        <li>Pulse <strong>Acceder</strong> <span class="replica replica--primario" data-replica="acceder" aria-hidden="true">Acceder</span>.
+          Se abrirá la página de identificación de su organización.</li>
         <li>Identifíquese con su usuario y su contraseña.</li>
         <li>Volverá a la app. Verá «Cargando…» y después la pantalla de Inicio.</li>
       </ol>
@@ -86,7 +152,9 @@
         <li>Todas las pestañas del navegador comparten la misma sesión.</li>
         <li>Si pasan 15 minutos sin usar la app, la sesión se cierra por seguridad. Su organización puede fijar otro tiempo.</li>
         <li>Al volver, verá «Sesión cerrada por inactividad.». Pulse <strong>Acceder</strong> para identificarse de nuevo.</li>
-        <li>Para salir, pulse <strong>Cerrar sesión</strong> en Mi perfil.</li>
+        <li>Para salir, pulse <strong>Cerrar sesión</strong>
+          <span class="replica replica--secundario" data-replica="cerrar-sesion" aria-hidden="true"><svg class="ic"><use href="#ic-salir" /></svg>Cerrar sesión</span>
+          en Mi perfil.</li>
       </ul>
     </section>
 
@@ -94,12 +162,13 @@
       <h2 id="titulo-instalacion">Instalar la app</h2>
       <p>Instalarla es opcional. Sin instalar, la app funciona igual en el navegador.</p>
       <p>Instalada, la app se abre desde su icono, a pantalla completa y sin las barras del navegador.</p>
-      <p>En la pantalla de acceso, bajo <strong>Acceder</strong>, está el botón <strong>Instalar la app</strong>. Si su navegador
-        lo permite, abre la ventana de instalación. Si no, muestra los pasos para su dispositivo.</p>
+      <p>En la pantalla de acceso, bajo <strong>Acceder</strong>, está el botón <strong>Instalar la app</strong>
+        <span class="replica replica--secundario replica--instalar" data-replica="instalar-la-app" aria-hidden="true"><svg class="ic"><use href="#ic-descargar" /></svg>Instalar la app</span>.
+        Si su navegador lo permite, abre la ventana de instalación. Si no, muestra los pasos para su dispositivo.</p>
       <h3>Android, con Chrome</h3>
       <ol>
         <li>Pulse <strong>Instalar la app</strong> y acepte la ventana de Chrome.</li>
-        <li>Si no aparece esa ventana, abra el menú ⋮ de Chrome.</li>
+        <li>Si no aparece esa ventana, abra el menú <span class="replica replica--menu" data-replica="menu-chrome" aria-hidden="true">⋮</span> de Chrome.</li>
         <li>Pulse «Añadir a pantalla de inicio».</li>
         <li>Pulse «Instalar».</li>
       </ol>
@@ -107,7 +176,8 @@
       <h3>iPhone y iPad, con Safari</h3>
       <p>Safari no permite instalar desde la propia página. Siga estos pasos:</p>
       <ol>
-        <li>Pulse el botón <strong>Compartir</strong> de Safari. En el iPhone está en la barra inferior.</li>
+        <li>Pulse el botón <strong>Compartir</strong> <span class="replica replica--icono" data-replica="compartir" aria-hidden="true"><svg class="ic"><use href="#ic-compartir" /></svg></span>
+          de Safari. En el iPhone está en la barra inferior.</li>
         <li>Elija «Añadir a pantalla de inicio».</li>
         <li>Deje activado «Abrir como app web» y pulse «Añadir».</li>
       </ol>
@@ -116,7 +186,8 @@
       <h3>Ordenador, con Chrome o Edge</h3>
       <ol>
         <li>Pulse <strong>Instalar la app</strong> y acepte la ventana del navegador.</li>
-        <li>También puede pulsar el icono de instalar que aparece a la derecha de la barra de direcciones.</li>
+        <li>También puede pulsar el icono de instalar <span class="replica replica--icono" data-replica="instalar-navegador" aria-hidden="true"><svg class="ic"><use href="#ic-instalar-navegador" /></svg></span>
+          que aparece a la derecha de la barra de direcciones.</li>
       </ol>
       <p>La app quedará entre las aplicaciones instaladas de su ordenador.</p>
       <h3>Actualizaciones</h3>
@@ -132,7 +203,8 @@
       <p>Es la primera pantalla. Arriba verá un saludo y la fecha. Debajo, varias tarjetas con un resumen:</p>
       <ul>
         <li><strong>Próximo turno</strong>: su siguiente turno de trabajo, con el día, el horario y la actividad.</li>
-        <li><strong>Última nómina</strong>: la más reciente. Pulse <strong>PDF</strong> para descargarla.</li>
+        <li><strong>Última nómina</strong>: la más reciente. Pulse <strong>PDF</strong>
+          <span class="replica replica--pdf" data-replica="pdf" aria-hidden="true"><svg class="ic"><use href="#ic-pdf" /></svg>PDF</span> para descargarla.</li>
         <li><strong>Solicitudes pendientes</strong>: las solicitudes de ausencia que esperan validación. Toque la cabecera
           para verlas en Ausencias, o una solicitud para abrirla.</li>
         <li>Si no tiene solicitudes pendientes, la tarjeta muestra su última solicitud y el enlace
@@ -155,7 +227,12 @@
       <p>Para actualizar la lista, deslice hacia abajo.</p>
       <h3>Filtros</h3>
       <ul>
-        <li>Bajo el título hay tres filtros: <strong>Estado</strong>, <strong>Ejercicio</strong> y <strong>Tipo</strong>.</li>
+        <li>Bajo el título hay tres filtros: <strong>Estado</strong>
+          <span class="replica replica--chip" data-replica="filtro-estado" aria-hidden="true">Estado <svg class="ic"><use href="#ic-desplegar" /></svg></span>,
+          <strong>Ejercicio</strong>
+          <span class="replica replica--chip" data-replica="filtro-ejercicio" aria-hidden="true">Ejercicio <svg class="ic"><use href="#ic-desplegar" /></svg></span> y
+          <strong>Tipo</strong>
+          <span class="replica replica--chip" data-replica="filtro-tipo" aria-hidden="true">Tipo <svg class="ic"><use href="#ic-desplegar" /></svg></span>.</li>
         <li>Toque uno, marque las opciones y pulse <strong>Aplicar</strong>. <strong>Limpiar</strong> quita lo marcado.</li>
         <li>Al principio se ven las pendientes, las validadas y las rechazadas. Para ver las anuladas, márquelas en el
           filtro Estado.</li>
@@ -163,7 +240,9 @@
       <h3>Detalle y tramitación</h3>
       <p>Toque una solicitud para ver su ficha. Verá sus datos y su tramitación: cada nivel, su estado y su fecha.</p>
       <h3>Nueva solicitud</h3>
-      <p>Pulse el botón <strong>Nueva</strong>, abajo a la derecha. Un asistente le guía paso a paso:</p>
+      <p>Pulse el botón <strong>Nueva</strong>
+        <span class="replica replica--nueva" data-replica="nueva" aria-hidden="true"><svg class="ic"><use href="#ic-mas" /></svg>Nueva</span>, abajo a la derecha.
+        Un asistente le guía paso a paso:</p>
       <ol>
         <li>Elija el tipo de ausencia.</li>
         <li>Indique las fechas.</li>
@@ -176,20 +255,25 @@
       </ol>
       <ul>
         <li>Antes de enviar, la app le pide confirmación. La solicitud queda pendiente de validación.</li>
-        <li>Con la flecha puede volver al paso anterior sin perder lo escrito.</li>
+        <li>Con la flecha <span class="replica replica--icono" data-replica="flecha-atras" aria-hidden="true"><svg class="ic"><use href="#ic-atras" /></svg></span>
+          puede volver al paso anterior sin perder lo escrito.</li>
         <li>Si cierra el asistente con datos, la app le pregunta antes de descartarlos.</li>
       </ul>
       <h3>Anular una solicitud</h3>
-      <p>Solo se pueden anular las solicitudes pendientes. Abra la solicitud, pulse <strong>Anular solicitud</strong> y
-        confirme con <strong>Sí, anular</strong>. No se puede deshacer.</p>
+      <p>Solo se pueden anular las solicitudes pendientes. Abra la solicitud, pulse <strong>Anular solicitud</strong>
+        <span class="replica replica--secundario" data-replica="anular-solicitud" aria-hidden="true"><svg class="ic"><use href="#ic-cerrar" /></svg>Anular solicitud</span>
+        y confirme con <strong>Sí, anular</strong>. No se puede deshacer.</p>
     </section>
 
     <section class="tarjeta" id="nominas" aria-labelledby="titulo-nominas">
       <h2 id="titulo-nominas">Nóminas</h2>
       <ul>
-        <li>Muestra las nóminas de un año. Para cambiar de año, toque el botón <strong>Ejercicio</strong>, bajo el título.</li>
+        <li>Muestra las nóminas de un año. Para cambiar de año, toque el botón <strong>Ejercicio</strong>
+          <span class="replica replica--chip" data-replica="ejercicio-nominas" aria-hidden="true">Ejercicio <svg class="ic"><use href="#ic-desplegar" /></svg></span>,
+          bajo el título.</li>
         <li>Cada nómina indica el mes, el tipo (Normal, Extra o Complementaria), la gerencia y la fecha de abono.</li>
-        <li>Pulse <strong>PDF</strong> para descargar el recibo. Mientras se prepara, el botón muestra un trébol animado.</li>
+        <li>Pulse <strong>PDF</strong> <span class="replica replica--pdf" data-replica="pdf" aria-hidden="true"><svg class="ic"><use href="#ic-pdf" /></svg>PDF</span>
+          para descargar el recibo. Mientras se prepara, el botón muestra un trébol animado.</li>
         <li>Si la descarga falla, verá un aviso. Inténtelo de nuevo.</li>
         <li>Para actualizar la lista, deslice hacia abajo.</li>
       </ul>
@@ -197,7 +281,14 @@
 
     <section class="tarjeta" id="mi-perfil" aria-labelledby="titulo-mi-perfil">
       <h2 id="titulo-mi-perfil">Mi perfil</h2>
-      <p>Se abre con <strong>Perfil</strong>, en la barra inferior. Arriba verá su foto, o sus iniciales, y su nombre.</p>
+      <p>Se abre con <strong>Perfil</strong>, en la barra inferior
+        <span class="replica replica--barra" data-replica="barra-inferior" aria-hidden="true">
+          <span class="barra__opcion"><svg class="ic ic--fino"><use href="#ic-inicio" /></svg>Inicio</span>
+          <span class="barra__opcion"><svg class="ic ic--fino"><use href="#ic-ausencias" /></svg>Ausencias</span>
+          <span class="barra__opcion"><svg class="ic ic--fino"><use href="#ic-nominas" /></svg>Nóminas</span>
+          <span class="barra__opcion"><svg class="ic ic--fino"><use href="#ic-perfil" /></svg>Perfil</span>
+        </span>.
+        Arriba verá su foto, o sus iniciales, y su nombre.</p>
       <p>Debajo hay tres tarjetas. Toque una para ver sus datos:</p>
       <ul>
         <li><strong>Datos personales</strong>: documento, nacimiento, nacionalidad, afiliación a la Seguridad Social e IBAN.</li>
@@ -209,8 +300,12 @@
         <li>Para cerrar los datos, pulse la ✕ o deslice hacia abajo.</li>
         <li>Por seguridad, del documento solo se ven los 4 últimos caracteres. Del IBAN, los 2 primeros y los 4 últimos.</li>
         <li>Los datos son solo de consulta. No se pueden cambiar desde la app.</li>
-        <li><strong>Ayuda y soporte</strong> abre esta página.</li>
-        <li><strong>Cerrar sesión</strong> cierra la sesión en todas las pestañas. Para volver, tendrá que identificarse.</li>
+        <li><strong>Ayuda y soporte</strong>
+          <span class="replica replica--secundario" data-replica="ayuda-y-soporte" aria-hidden="true"><svg class="ic"><use href="#ic-ayuda" /></svg>Ayuda y soporte</span>
+          abre esta página.</li>
+        <li><strong>Cerrar sesión</strong>
+          <span class="replica replica--secundario" data-replica="cerrar-sesion" aria-hidden="true"><svg class="ic"><use href="#ic-salir" /></svg>Cerrar sesión</span>
+          cierra la sesión en todas las pestañas. Para volver, tendrá que identificarse.</li>
         <li>Al pie se indica la versión de la app.</li>
       </ul>
     </section>
@@ -246,5 +341,73 @@
       </ul>
     </section>
   </main>
+
+  <button type="button" id="volver-arriba" aria-label="Volver arriba" hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 15l7-7 7 7" /></svg>
+  </button>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var UMBRAL_PARA_MOSTRAR_VOLVER_ARRIBA_PX = 300;
+      var cabecera = document.querySelector('body > header');
+      var titulo = cabecera.querySelector('h1');
+      var botonVolverArriba = document.getElementById('volver-arriba');
+      var movimientoReducido = window.matchMedia('(prefers-reduced-motion: reduce)');
+      var haySolicitudDePintado = false;
+
+      function comportamientoDeDesplazamiento() {
+        return movimientoReducido.matches ? 'auto' : 'smooth';
+      }
+
+      // Las secciones dejan este alto libre arriba al saltar (`scroll-margin-top`); crece con la letra, por eso se mide.
+      function medirCabecera() {
+        document.documentElement.style.setProperty('--alto-cabecera', cabecera.offsetHeight + 'px');
+      }
+
+      // `replaceState` cambia la dirección sin añadir una entrada al historial: «atrás» no recorre las secciones.
+      function irASeccion(evento) {
+        var destino = document.getElementById(evento.currentTarget.hash.slice(1));
+        if (!destino) return;
+        evento.preventDefault();
+        destino.setAttribute('tabindex', '-1');
+        destino.scrollIntoView({ behavior: comportamientoDeDesplazamiento(), block: 'start' });
+        destino.focus({ preventScroll: true });
+        history.replaceState(null, '', evento.currentTarget.hash);
+      }
+
+      function volverArriba() {
+        window.scrollTo({ top: 0, behavior: comportamientoDeDesplazamiento() });
+        titulo.focus({ preventScroll: true });
+        history.replaceState(null, '', location.pathname + location.search);
+      }
+
+      function actualizarBotonVolverArriba() {
+        botonVolverArriba.hidden = window.scrollY < UMBRAL_PARA_MOSTRAR_VOLVER_ARRIBA_PX;
+        haySolicitudDePintado = false;
+      }
+
+      function alDesplazarse() {
+        if (haySolicitudDePintado) return;
+        haySolicitudDePintado = true;
+        window.requestAnimationFrame(actualizarBotonVolverArriba);
+      }
+
+      function vigilarElAltoDeLaCabecera() {
+        if ('ResizeObserver' in window) new ResizeObserver(medirCabecera).observe(cabecera);
+        else window.addEventListener('resize', medirCabecera);
+      }
+
+      document.querySelectorAll('nav a[href^="#"]').forEach(function (enlace) {
+        enlace.addEventListener('click', irASeccion);
+      });
+      botonVolverArriba.addEventListener('click', volverArriba);
+      window.addEventListener('scroll', alDesplazarse, { passive: true });
+      medirCabecera();
+      vigilarElAltoDeLaCabecera();
+      actualizarBotonVolverArriba();
+    })();
+  </script>
 </body>
 </html>
